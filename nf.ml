@@ -1,4 +1,5 @@
 open Definitions
+open Examples   
 
 let rec nnf e = 
     match e with
@@ -32,12 +33,6 @@ let rec dnf e =
         | And (e1, e2) -> And (dnf e1, dnf e2)
         | x -> x
 
-
-(* Examples that only run when executing nf.ml directly *)
-let expr1 = And (Var "A", Neg (Var "B"))
-let expr2 = Implies (Var "A", Var "C")
-let expr3 = Neg (And (Var "A", Var "B"))
-let expr4 = Implies (And (Var "p", Implies (Var "q", Var "r")), Var "s")
 
 let () = 
     Printf.printf "nnf of expr1: %s\n" (string_of_propositional_expr (nnf expr1));

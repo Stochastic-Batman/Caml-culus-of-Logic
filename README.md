@@ -14,7 +14,8 @@ To execute the examples included in `nf.ml`:
 
 ```
 ocamlc -c definitions.ml
+ocamlc -c examples.ml
 ocamlc -c nf.ml
-ocamlc -o nf definitions.cmo nf.cmo
+ocamlc -o nf definitions.cmo examples.cmo nf.cmo
 ./nf
 ```
