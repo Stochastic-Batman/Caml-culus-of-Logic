@@ -1,5 +1,7 @@
 open Definitions
+open Aux_propositional
 open Examples   
+
 
 let rec nnf e = 
     match e with
@@ -35,9 +37,10 @@ let rec dnf e =
 
 
 let () = 
-    Printf.printf "nnf of expr1: %s\n" (string_of_propositional_expr (nnf expr1));
-    Printf.printf "nnf of expr2: %s\n" (string_of_propositional_expr (nnf expr2));
-    Printf.printf "nnf of expr3: %s\n" (string_of_propositional_expr (nnf expr3));
-    Printf.printf "nnf of expr4: %s\n" (string_of_propositional_expr (nnf expr4));
-    Printf.printf "cnf of expr4: %s\n" (string_of_propositional_expr (cnf expr4));
-    Printf.printf "dnf of expr4: %s\n" (string_of_propositional_expr (dnf expr4));
+    Printf.printf "nnf of %s: %s\n" (string_of_propositional_expr expr1) (string_of_propositional_expr (nnf expr1));
+    Printf.printf "nnf of %s: %s\n" (string_of_propositional_expr expr2) (string_of_propositional_expr (nnf expr2));
+    Printf.printf "nnf of %s: %s\n" (string_of_propositional_expr expr3) (string_of_propositional_expr (nnf expr3));
+    Printf.printf "nnf of %s: %s\n" (string_of_propositional_expr expr4) (string_of_propositional_expr (nnf expr4));
+    Printf.printf "negation of %s: %s\n" (string_of_propositional_expr expr4) (string_of_propositional_expr (negate_propositional_expr expr4));
+    Printf.printf "cnf of %s: %s\n" (string_of_propositional_expr expr4) (string_of_propositional_expr (cnf expr4));
+    Printf.printf "dnf of %s: %s\n" (string_of_propositional_expr expr4) (string_of_propositional_expr (dnf expr4));
