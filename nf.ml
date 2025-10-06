@@ -44,3 +44,5 @@ let run_nf_tests () =
     Printf.printf "negation of %s: %s\n" (string_of_propositional_expr expr4) (string_of_propositional_expr (negate_propositional_expr expr4));
     Printf.printf "cnf of %s: %s\n" (string_of_propositional_expr expr4) (string_of_propositional_expr (cnf expr4));
     Printf.printf "dnf of %s: %s\n" (string_of_propositional_expr expr4) (string_of_propositional_expr (dnf expr4));
+
+let _ = run_proof_procedures_propositional_tests ()
