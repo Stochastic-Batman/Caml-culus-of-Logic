@@ -36,7 +36,7 @@ let rec dnf e =
         | x -> x
 
 
-let () = 
+let run_nf_tests () = 
     Printf.printf "nnf of %s: %s\n" (string_of_propositional_expr expr1) (string_of_propositional_expr (nnf expr1));
     Printf.printf "nnf of %s: %s\n" (string_of_propositional_expr expr2) (string_of_propositional_expr (nnf expr2));
     Printf.printf "nnf of %s: %s\n" (string_of_propositional_expr expr3) (string_of_propositional_expr (nnf expr3));
