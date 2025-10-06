@@ -29,3 +29,17 @@ let rec negate_propositional_expr expr =
                 | Or (e1, e2) -> And (negate_propositional_expr e1, negate_propositional_expr e2)
                 | Implies (e1, e2) -> And (e1, negate_propositional_expr e2)
                 | Equivalence (e1, e2) -> Or (And (e1, negate_propositional_expr e2), And (negate_propositional_expr e1, e2))
+
+
+let rec distribute_or_over_and e1 e2 =
+        match e1, e2 with
+                | And (a, b), c -> And (distribute_or_over_and a c, distribute_or_over_and b c)
+                | a, And (b, c) -> And (distribute_or_over_and a b, distribute_or_over_and a c)
+                | _ -> Or (e1, e2)
+
+
+let rec distribute_and_over_or e1 e2 =
+        match e1, e2 with
+                | Or (a, b), c -> Or (distribute_and_over_or a c, distribute_and_over_or b c)
+                | a, Or (b, c) -> Or (distribute_and_over_or a b, distribute_and_over_or a c)
+                | _ -> And (e1, e2)
