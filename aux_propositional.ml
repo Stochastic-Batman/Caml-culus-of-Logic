@@ -45,7 +45,7 @@ let rec distribute_and_over_or e1 e2 =
                 | _ -> And (e1, e2)
 
 
-                let cnf_clauses expr =
+let cnf_clauses expr =
         let rec extract_clause e =
                 match e with
                 | Or (e1, e2) ->
@@ -66,3 +66,24 @@ let rec distribute_and_over_or e1 e2 =
                         clause :: acc
         in
         List.rev (collect_clauses expr [])
+
+
+let are_complementary e1 e2 =
+        match e1, e2 with
+        | Var v1, Neg (Var v2) -> v1 = v2
+        | Neg (Var v1), Var v2 -> v1 = v2
+        | _ -> false
+
+
+let remove_literal c x = List.filter (fun el -> el <> x) c
+
+
+let contains_literal c x = List.exists (fun el -> el = x) c
+
+
+let remove_duplicates c =
+        let rec aux seen = function
+                | [] -> List.rev seen
+                | h :: t -> if List.mem h seen then aux seen t else aux (h :: seen) t
+        in
+        aux [] c

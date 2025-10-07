@@ -22,57 +22,57 @@ let run_nf_tests () =
 let run_proof_procedures_propositional_tests () =
     Printf.printf "=== Propositional Logic : Proof Procedure Tests ===\n";
 
-    (* Test 1: Original expr4 *)
-    let preprocessed = resolution_preprocessing expr4 in
-    Printf.printf "Test 1 - Preprocessed %s: %s\n" (string_of_propositional_expr expr4) (string_of_propositional_expr preprocessed);
+    (* Test resolution_propositional *)
+    let test_resolution expr name =
+        Printf.printf "Testing: %s\n" name;
+        Printf.printf "Formula: %s\n" (string_of_propositional_expr expr);
+        
+        let result = resolution_propositional expr in
+        Printf.printf "Resolution result: %s\n" (if result then "SAT" else "UNSAT");
+        
+        let preprocessed = resolution_preprocessing expr in
+        let clauses = cnf_clauses preprocessed in
+        Printf.printf "Clauses after negating and transforming into CNF: ";
+        List.iteri (fun i clause ->
+            let clause_str = String.concat " ∨ " (List.map string_of_propositional_expr clause) in
+            Printf.printf "%s%s" (if i > 0 then ", " else "") clause_str
+        ) clauses;
+        Printf.printf "\n\n"
+    in
+
+    (* Essential test cases *)
+    test_resolution (And (Var "A", Neg (Var "A"))) "A ∧ ¬A (contradiction)";
+    test_resolution (Implies (Var "A", Var "A")) "A → A (tautology)";
+    test_resolution expr1 "A ∧ ¬B";
+    test_resolution expr4 "(p ∧ (q → r)) → s";
+
+    (* Test resolution steps *)
+    Printf.printf "--- Resolution Steps Test ---\n";
+    let test_expr = And (Or (Var "A", Var "B"), Or (Neg (Var "A"), Var "C")) in
+    let preprocessed = resolution_preprocessing test_expr in
     let clauses = cnf_clauses preprocessed in
-    Printf.printf "CNF Clauses:\n";
+    Printf.printf "Formula: (A ∨ B) ∧ (¬A ∨ C)\n";
+    Printf.printf "Clauses after negating and transforming into CNF:\n";
     List.iteri (fun i clause ->
         let clause_str = String.concat " ∨ " (List.map string_of_propositional_expr clause) in
-        Printf.printf "  Clause %d: %s\n" (i+1) clause_str
+        Printf.printf "  [%d] %s\n" (i+1) clause_str
     ) clauses;
-
+    
     if List.length clauses >= 2 then
-        let c1 = List.nth clauses 0 in
-        let c2 = List.nth clauses 1 in
+        let c1 = List.nth clauses 1 in
+        let c2 = List.nth clauses 2 in
         let resolvents = find_resolvents c1 c2 in
-        Printf.printf "Resolvents between clause 1 and 2:\n";
+        Printf.printf "Resolvent for clauses 1 and 2: ";
         if List.length resolvents = 0 then
-            Printf.printf "  No resolvents found (no complementary literals)\n"
+            Printf.printf "None\n"
         else
             List.iteri (fun i res ->
                 let res_str = String.concat " ∨ " (List.map string_of_propositional_expr res) in
-                Printf.printf "  Resolvent %d: %s\n" (i+1) res_str
-            ) resolvents
+                Printf.printf "%s%s" (if i > 0 then ", " else "") res_str
+            ) resolvents;
+        Printf.printf "\n"
     else
-        Printf.printf "Not enough clauses for resolution test\n";
-    Printf.printf "\n";
-
-    (* Test 2: expr5 - should have resolvents *)
-    Printf.printf "Test 2 - Testing resolution with complementary literals:\n";
-    let preprocessed5 = resolution_preprocessing expr5 in
-    Printf.printf "Preprocessed %s: %s\n" (string_of_propositional_expr expr5) (string_of_propositional_expr preprocessed5);
-    let clauses5 = cnf_clauses preprocessed5 in
-    Printf.printf "CNF Clauses:\n";
-    List.iteri (fun i clause ->
-        let clause_str = String.concat " ∨ " (List.map string_of_propositional_expr clause) in
-        Printf.printf "  Clause %d: %s\n" (i+1) clause_str
-    ) clauses5;
-
-    if List.length clauses5 >= 2 then
-        let c1 = List.nth clauses5 1 in
-        let c2 = List.nth clauses5 2 in
-        let resolvents = find_resolvents c1 c2 in
-        Printf.printf "Resolvents between clause 2 and 3:\n";
-        if List.length resolvents = 0 then
-            Printf.printf "  No resolvents found\n"
-        else
-            List.iteri (fun i res ->
-                let res_str = String.concat " ∨ " (List.map string_of_propositional_expr res) in
-                Printf.printf "  Resolvent %d: %s\n" (i+1) res_str
-            ) resolvents
-    else
-        Printf.printf "Not enough clauses for resolution test\n";
+        Printf.printf "Not enough clauses\n";
     Printf.printf "\n"
 
 
