@@ -43,3 +43,26 @@ let rec distribute_and_over_or e1 e2 =
                 | Or (a, b), c -> Or (distribute_and_over_or a c, distribute_and_over_or b c)
                 | a, Or (b, c) -> Or (distribute_and_over_or a b, distribute_and_over_or a c)
                 | _ -> And (e1, e2)
+
+
+                let cnf_clauses expr =
+        let rec extract_clause e =
+                match e with
+                | Or (e1, e2) ->
+                        let clause1 = extract_clause e1 in
+                        let clause2 = extract_clause e2 in
+                        clause1 @ clause2
+                | Var v -> [Var v]
+                | Neg (Var v) -> [Neg (Var v)]
+                | _ -> [e]  (* Fallback for unexpected cases, but this should not happen in the first place *)
+        in
+        let rec collect_clauses e acc =
+                match e with
+                | And (e1, e2) ->
+                        let acc1 = collect_clauses e1 acc in
+                        collect_clauses e2 acc1
+                | _ ->  (* Fallback for unexpected cases, but this should not happen in the first place *)
+                        let clause = extract_clause e in
+                        clause :: acc
+        in
+        List.rev (collect_clauses expr [])
