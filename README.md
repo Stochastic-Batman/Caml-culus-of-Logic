@@ -19,6 +19,7 @@ The module `nf.ml` implements recursive transformation algorithms for propositio
 
 `proof_procedures_propositional.ml` implements the following proof methods and some of the auxiliary functions for each method:
 1. Resolution
+<img src="images_for_README/Resolution_procedure.png" width="500" height="300" alt="Resolution Procedure Pseudocode is supposed to be displayed here">
 2. Sequent Calculus (not yet implemented)
 3. Tableaux (not yet implemented)
 
