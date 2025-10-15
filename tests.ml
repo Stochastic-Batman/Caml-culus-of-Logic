@@ -4,6 +4,7 @@ open Definitions
 open Aux_propositional
 open Nf
 open Resolution_propositional
+open Sequent_calculus_propositional
 open Examples
 
 
@@ -76,9 +77,57 @@ let run_resolution_propositional_tests () =
     Printf.printf "\n"
 
 
+let run_sequent_calculus_tests () =
+  Printf.printf "=== Propositional Logic : Sequent Calculus Tests ===\n";
+  
+  let test_sequent formula name =
+    Printf.printf "Testing: %s\n" name;
+    Printf.printf "Formula: %s\n" (string_of_propositional_expr formula);
+    
+    let result = prove_formula formula in
+    (match result with
+     | Proved -> Printf.printf "Result: PROVED (valid)\n"
+     | Failed _ -> Printf.printf "Result: FAILED (not valid)\n");
+    Printf.printf "\n"
+  in
+
+  let test_general_sequent seq name =
+    Printf.printf "Testing sequent: %s\n" name;
+    Printf.printf "Sequent: %s\n" (string_of_propositional_sequent seq);
+    
+    let result = prove_sequent_top seq in
+    (match result with
+     | Proved -> Printf.printf "Result: PROVED\n"
+     | Failed _ -> Printf.printf "Result: FAILED\n");
+    Printf.printf "\n"
+  in
+  
+  (* Test formula validity *)
+  test_sequent (Implies (Var "A", Var "A")) "A → A (tautology)";
+  test_sequent (Implies (And (Var "A", Var "B"), Var "A")) "A∧B → A (valid)";
+  test_sequent (And (Var "A", Neg (Var "A"))) "A ∧ ¬A (contradiction)";
+  
+  (* Test examples from slides *)
+  let slide_example = Implies (Implies (Var "p", Var "q"), 
+                              Implies (Neg (Var "q"), Neg (Var "p"))) in
+  test_sequent slide_example "(p → q) → (¬q → ¬p)";
+  
+  (* Test general sequents *)
+  test_general_sequent 
+    { antecedent = [Var "A"]; consequent = [Var "A"] } 
+    "A ⟶ A (axiom)";
+    
+  test_general_sequent
+    { antecedent = [Var "A"; Var "B"]; consequent = [Var "A"] }
+    "A, B ⟶ A";
+  
+  Printf.printf "\n"
+
+
 let run_all_tests () =
     run_nf_tests ();
-    run_resolution_propositional_tests ()
+    run_resolution_propositional_tests ();
+    run_sequent_calculus_tests ()
 
 
 let () = run_all_tests ()

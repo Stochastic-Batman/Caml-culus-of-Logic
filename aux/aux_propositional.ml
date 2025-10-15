@@ -21,6 +21,14 @@ let rec string_of_propositional_expr e =
                 | Equivalence (e1, e2) -> "(" ^ (string_of_propositional_expr e1) ^ " ↔ " ^ (string_of_propositional_expr e2) ^ ")"
 
 
+let string_of_propositional_sequent seq =
+        let aux lst = 
+                if lst = [] then "∅"
+                else String.concat ", " (List.map string_of_propositional_expr lst)
+        in
+        (aux seq.antecedent) ^ " ⟶ " ^ (aux seq.consequent)
+
+
 let rec negate_propositional_expr expr = 
         match expr with
                 | Var e -> Neg (Var e)
