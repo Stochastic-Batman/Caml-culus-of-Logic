@@ -3,7 +3,7 @@
 open Definitions
 open Aux_propositional
 open Nf
-open Proof_procedures_propositional
+open Resolution_propositional
 open Examples
 
 
@@ -19,8 +19,8 @@ let run_nf_tests () =
     Printf.printf "\n"
 
 
-let run_proof_procedures_propositional_tests () =
-    Printf.printf "=== Propositional Logic : Proof Procedure Tests ===\n";
+let run_resolution_propositional_tests () =
+    Printf.printf "=== Propositional Logic : Resolution Tests ===\n";
 
     (* Test resolution_propositional *)
     let test_resolution expr name =
@@ -78,7 +78,7 @@ let run_proof_procedures_propositional_tests () =
 
 let run_all_tests () =
     run_nf_tests ();
-    run_proof_procedures_propositional_tests ()
+    run_resolution_propositional_tests ()
 
 
 let () = run_all_tests ()
