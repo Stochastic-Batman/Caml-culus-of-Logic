@@ -5,6 +5,7 @@ open Aux_propositional
 open Nf
 open Resolution_propositional
 open Sequent_calculus_propositional
+open Tableaux_propositional
 open Examples
 
 
@@ -124,10 +125,55 @@ let run_sequent_calculus_tests () =
   Printf.printf "\n"
 
 
+let run_tableaux_tests () =
+  Printf.printf "=== Propositional Logic : Tableaux Tests ===\n";
+  
+  let test_tableaux formula name =
+    Printf.printf "Testing: %s\n" name;
+    Printf.printf "Formula: %s\n" (string_of_propositional_expr formula);
+    
+    (* Test semantic tableaux *)
+    let semantic_result = complete_semantic_tableaux_propositional formula in
+    Printf.printf "Semantic Tableaux: ";
+    (match semantic_result with
+     | TableauClosed -> Printf.printf "CLOSED (unsatisfiable)\n"
+     | TableauOpen valuation -> 
+        Printf.printf "OPEN (satisfiable)\n";
+        Printf.printf "  Satisfying valuation: ";
+        List.iter (fun (v, b) -> Printf.printf "%s=%b " v b) valuation;
+        Printf.printf "\n"
+     | TableauUnknown -> Printf.printf "UNKNOWN\n");
+    
+    (* Test analytic tableaux *)
+    let analytic_result = analytic_tableaux_propositional formula in
+    Printf.printf "Analytic Tableaux: ";
+    (match analytic_result with
+     | TableauClosed -> Printf.printf "CLOSED (unsatisfiable)\n"
+     | TableauOpen _ -> Printf.printf "OPEN (satisfiable)\n"
+     | TableauUnknown -> Printf.printf "UNKNOWN\n");
+    
+    (* Test proving by tableaux *)
+    let proved = prove_by_tableaux formula in
+    Printf.printf "Proved by tableaux: %s\n" (if proved then "VALID" else "NOT VALID");
+    
+    Printf.printf "\n"
+  in
+  
+  (* Test cases from the PDF and examples *)
+  test_tableaux tableaux_expr1 "¬((p → q) → (¬q → ¬p))";
+  test_tableaux tableaux_expr2 "¬((p → q) ∧ (¬p → ¬q))";
+  test_tableaux tableaux_expr3 "(p ∨ q) ∧ (¬p ∧ ¬q)";
+  test_tableaux tableaux_expr4 "A → A";
+  test_tableaux tableaux_expr5 "A ∧ ¬A";
+  
+  Printf.printf "\n"
+
+
 let run_all_tests () =
     run_nf_tests ();
     run_resolution_propositional_tests ();
-    run_sequent_calculus_tests ()
+    run_sequent_calculus_tests ();
+    run_tableaux_tests ()
 
 
 let () = run_all_tests ()
