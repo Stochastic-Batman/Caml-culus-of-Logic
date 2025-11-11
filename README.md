@@ -76,7 +76,14 @@ The module `first_order/unification_first_order.ml` implements:
 
 ## Executing the Tests
 
+Simply run this command to compile the code:
+
 ```
 ocamlc -I aux -I propositional -I first_order -o tests definitions.ml aux/aux_propositional.ml aux/aux_first_order.ml examples.ml propositional/nf.ml propositional/resolution_propositional.ml propositional/sequent_calculus_propositional.ml propositional/tableaux_propositional.ml first_order/clausification_first_order.ml first_order/unification_first_order.ml tests.ml
+```
+
+and then run the tests:
+
+```
 ./tests
 ```
