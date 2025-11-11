@@ -57,3 +57,64 @@ ocamlc -c -I aux -I propositional tests.ml
 ocamlc -I aux -I propositional -o tests definitions.cmo aux_propositional.cmo examples.cmo nf.cmo resolution_propositional.cmo sequent_calculus_propositional.cmo tableaux_propositional.cmo tests.cmo
 ./tests
 ```
+
+## First-Order Logic
+
+The first-order logic implementation extends the propositional system with quantifiers, variables, functions, and predicates. Key components include:
+- **Terms**: Variables, constants, and function applications
+- **Formulas**: Atomic formulas, logical connectives, and quantifiers
+- **Substitutions**: Variable replacements with terms
+- **Structures**: Domain with function and predicate interpretations
+
+### Clausification
+
+The module `first_order/clausification_first_order.ml` implements the complete clausification process:
+- **PNF Transformation**: Converts formulas to Prenex Normal Form
+- **Skolemization**: Eliminates existential quantifiers using Skolem functions
+- **CNF Transformation**: Converts the matrix to Conjunctive Normal Form
+- **Clause Extraction**: Produces sets of clauses for resolution
+
+<img src="images_for_README/clausification_first_order.png" width="500" height="300" alt="Clausification Process for First-Order Logic">
+
+### Unification
+
+
+The module first_order/unification_first_order.ml implements:
+- **Most General Unifier (MGU)**: Finds the most general substitution that unifies terms
+- **Occurs Check**: Prevents infinite unifications
+- **Pattern Matching**: One-way unification
+
+<img src="images_for_README/unification_first_order_1.png" width="500" height="300" alt="Unification Algorithm Part 1"> 
+
+<img src="images_for_README/unification_first_order_2.png" width="500" height="300" alt="Unification Algorithm Part 2"> 
+
+<img src="images_for_README/unification_first_order_3.png" width="500" height="300" alt="Unification Algorithm Part 3"> 
+
+<img src="images_for_README/unification_first_order_4.png" width="500" height="300" alt="Unification Algorithm Part 4"> 
+
+<img src="images_for_README/unification_first_order_5.png" width="500" height="300" alt="Unification Algorithm Part 5">
+
+### Executing the Tests
+
+```
+ocamlc -I aux -I propositional -o tests definitions.ml aux/aux_propositional.ml examples.ml propositional/nf.ml propositional/resolution_propositional.ml propositional/sequent_calculus_propositional.ml propositional/tableaux_propositional.ml tests.ml
+./tests
+```
+OR
+```
+ocamlc -c definitions.ml
+ocamlc -c -I aux aux/aux_first_order.ml
+ocamlc -c examples.ml
+ocamlc -c -I aux -I first_order first_order/clausification_first_order.ml
+ocamlc -c -I aux -I first_order first_order/unification_first_order.ml
+ocamlc -c -I aux -I propositional -I first_order tests.ml
+ocamlc -I aux -I first_order -o tests definitions.cmo aux_first_order.cmo examples.cmo clausification_first_order.cmo unification_first_order.cmo tests.cmo
+./tests
+```
+
+## Executing All the Tests
+
+```
+ocamlc -I aux -I propositional -I first_order -o tests definitions.ml aux/aux_propositional.ml aux/aux_first_order.ml examples.ml propositional/nf.ml propositional/resolution_propositional.ml propositional/sequent_calculus_propositional.ml propositional/tableaux_propositional.ml first_order/clausification_first_order.ml first_order/unification_first_order.ml tests.ml
+./tests
+```

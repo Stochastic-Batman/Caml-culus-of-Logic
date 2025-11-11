@@ -3,7 +3,7 @@ open Aux_propositional
 open Examples
 
 
-let rec nnf e = 
+let rec nnf (e: propositional_expr) : propositional_expr = 
         match e with
                 | Var _ -> e
                 | Neg e' -> (match e' with
@@ -21,7 +21,7 @@ let rec nnf e =
 
 (* distribute_or_over_and & distribute_and_over_or are from aux_propositional.ml *)
 
-let rec cnf e =
+let rec cnf (e: propositional_expr) : propositional_expr =
         let e_nnf = nnf e in
         match e_nnf with
                 | And (e1, e2) -> And (cnf e1, cnf e2)
@@ -29,7 +29,7 @@ let rec cnf e =
                 | _ -> e_nnf
 
 
-let rec dnf e =
+let rec dnf (e: propositional_expr) : propositional_expr =
         let e_nnf = nnf e in
         match e_nnf with
                 | Or (e1, e2) -> Or (dnf e1, dnf e2)
