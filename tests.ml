@@ -7,6 +7,7 @@ open Tableaux_propositional
 open Aux_first_order
 open Clausification_first_order
 open Unification_first_order
+open Resolution_first_order
 open Examples
 
 
@@ -14,7 +15,7 @@ open Examples
 
 (* Propositional Logic *)
 
-let run_nf_tests () = 
+let run_nf_tests () =
     Printf.printf "=== Propositional Logic : Normal Form Tests ===\n";
     Printf.printf "NNF of %s: %s\n" (string_of_propositional_expr expr1) (string_of_propositional_expr (nnf expr1));
     Printf.printf "NNF of %s: %s\n" (string_of_propositional_expr expr2) (string_of_propositional_expr (nnf expr2));
@@ -33,10 +34,10 @@ let run_resolution_propositional_tests () =
     let test_resolution expr name =
         Printf.printf "Testing: %s\n" name;
         Printf.printf "Formula: %s\n" (string_of_propositional_expr expr);
-        
+
         let result = resolution_propositional expr in
         Printf.printf "Resolution result: %s\n" (if result then "SAT" else "UNSAT");
-        
+
         let preprocessed = resolution_preprocessing expr in
         let clauses = cnf_clauses preprocessed in
         Printf.printf "Clauses after negating and transforming into CNF: ";
@@ -64,11 +65,12 @@ let run_resolution_propositional_tests () =
         let clause_str = String.concat " ∨ " (List.map string_of_propositional_expr clause) in
         Printf.printf "  [%d] %s\n" (i+1) clause_str
     ) clauses;
-    
+
     if List.length clauses >= 2 then
         let c1 = List.nth clauses 1 in
         let c2 = List.nth clauses 2 in
-        let resolvents = find_resolvents c1 c2 in
+        (* Use qualified name for propositional resolvents *)
+        let resolvents = Resolution_propositional.find_resolvents c1 c2 in
         Printf.printf "Resolvent for clauses 1 and 2: ";
         if List.length resolvents = 0 then
             Printf.printf "None\n"
@@ -85,11 +87,11 @@ let run_resolution_propositional_tests () =
 
 let run_sequent_calculus_tests () =
   Printf.printf "=== Propositional Logic : Sequent Calculus Tests ===\n";
-  
+
   let test_sequent formula name =
     Printf.printf "Testing: %s\n" name;
     Printf.printf "Formula: %s\n" (string_of_propositional_expr formula);
-    
+
     let result = prove_formula formula in
     (match result with
      | Proved -> Printf.printf "Result: PROVED (valid)\n"
@@ -100,55 +102,55 @@ let run_sequent_calculus_tests () =
   let test_general_sequent seq name =
     Printf.printf "Testing sequent: %s\n" name;
     Printf.printf "Sequent: %s\n" (string_of_propositional_sequent seq);
-    
+
     let result = prove_sequent_top seq in
     (match result with
      | Proved -> Printf.printf "Result: PROVED\n"
      | Failed _ -> Printf.printf "Result: FAILED\n");
     Printf.printf "\n"
   in
-  
+
   (* Test formula validity *)
   test_sequent (Implies (Var "A", Var "A")) "A → A (tautology)";
   test_sequent (Implies (And (Var "A", Var "B"), Var "A")) "A∧B → A (valid)";
   test_sequent (And (Var "A", Neg (Var "A"))) "A ∧ ¬A (contradiction)";
-  
+
   (* Test examples from slides *)
-  let slide_example = Implies (Implies (Var "p", Var "q"), 
+  let slide_example = Implies (Implies (Var "p", Var "q"),
                               Implies (Neg (Var "q"), Neg (Var "p"))) in
   test_sequent slide_example "(p → q) → (¬q → ¬p)";
-  
+
   (* Test general sequents *)
-  test_general_sequent 
-    { antecedent = [Var "A"]; consequent = [Var "A"] } 
+  test_general_sequent
+    { antecedent = [Var "A"]; consequent = [Var "A"] }
     "A ⟶ A (axiom)";
-    
+
   test_general_sequent
     { antecedent = [Var "A"; Var "B"]; consequent = [Var "A"] }
     "A, B ⟶ A";
-  
+
   Printf.printf "\n"
 
 
 let run_tableaux_tests () =
   Printf.printf "=== Propositional Logic : Tableaux Tests ===\n";
-  
+
   let test_tableaux formula name =
     Printf.printf "Testing: %s\n" name;
     Printf.printf "Formula: %s\n" (string_of_propositional_expr formula);
-    
+
     (* Test semantic tableaux *)
     let semantic_result = complete_semantic_tableaux_propositional formula in
     Printf.printf "Semantic Tableaux: ";
     (match semantic_result with
      | TableauClosed -> Printf.printf "CLOSED (unsatisfiable)\n"
-     | TableauOpen valuation -> 
+     | TableauOpen valuation ->
         Printf.printf "OPEN (satisfiable)\n";
         Printf.printf "  Satisfying valuation: ";
         List.iter (fun (v, b) -> Printf.printf "%s=%b " v b) valuation;
         Printf.printf "\n"
      | TableauUnknown -> Printf.printf "UNKNOWN\n");
-    
+
     (* Test analytic tableaux *)
     let analytic_result = analytic_tableaux_propositional formula in
     Printf.printf "Analytic Tableaux: ";
@@ -156,21 +158,21 @@ let run_tableaux_tests () =
      | TableauClosed -> Printf.printf "CLOSED (unsatisfiable)\n"
      | TableauOpen _ -> Printf.printf "OPEN (satisfiable)\n"
      | TableauUnknown -> Printf.printf "UNKNOWN\n");
-    
+
     (* Test proving by tableaux *)
     let proved = prove_by_tableaux formula in
     Printf.printf "Proved by tableaux: %s\n" (if proved then "VALID" else "NOT VALID");
-    
+
     Printf.printf "\n"
   in
-  
+
   (* Test cases from the PDF and examples *)
   test_tableaux tableaux_expr1 "¬((p → q) → (¬q → ¬p))";
   test_tableaux tableaux_expr2 "¬((p → q) ∧ (¬p → ¬q))";
   test_tableaux tableaux_expr3 "(p ∨ q) ∧ (¬p ∧ ¬q)";
   test_tableaux tableaux_expr4 "A → A";
   test_tableaux tableaux_expr5 "A ∧ ¬A";
-  
+
   Printf.printf "\n"
 
 
@@ -252,12 +254,45 @@ let run_first_order_tests () =
     Printf.printf "\n"
 
 
+let run_resolution_first_order_tests () =
+    Printf.printf "=== First-Order Logic : Resolution Tests ===\n";
+
+    let test_resolution formula name =
+        Printf.printf "Testing: %s\n" name;
+        Printf.printf "Formula: %s\n" (string_of_formula_first_order formula);
+
+        (* Show clausified form *)
+        let clauses = clausify formula in
+        Printf.printf "Clauses:\n";
+        List.iteri (fun i clause ->
+            let clause_str = String.concat " ∨ " (List.map string_of_formula_first_order clause) in
+            Printf.printf "  [%d] %s\n" (i+1) clause_str
+        ) clauses;
+        Printf.printf "\n"
+    in
+
+    (* Test cases *)
+    test_resolution resolution_example1 "∀x.P(x)";
+    test_resolution resolution_example2 "∃x.¬P(x)";
+    test_resolution resolution_example3 "∀x.Man(x) → Man(socrates)";
+    test_resolution resolution_example4 "(∀x.Man(x) → Mortal(x)) ∧ Man(socrates)";
+    test_resolution resolution_example5 "∀x.∃y.Loves(x,y)";
+
+    (* Unsatisfiable test cases *)
+    Printf.printf "--- Unsatisfiable Formulas ---\n";
+    test_resolution resolution_unsat1 "∀x.P(x) ∧ ∃x.¬P(x)";
+    test_resolution resolution_unsat2 "Socrates mortality paradox";
+
+    Printf.printf "\n"
+
+
 let run_all_tests () =
     run_nf_tests ();
     run_resolution_propositional_tests ();
     run_sequent_calculus_tests ();
     run_tableaux_tests ();
-    run_first_order_tests ()
+    run_first_order_tests ();
+    run_resolution_first_order_tests ()
 
 
 let () = run_all_tests ()

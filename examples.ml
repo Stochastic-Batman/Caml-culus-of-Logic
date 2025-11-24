@@ -42,3 +42,12 @@ let unification_example4 = (FOFunc("f", [FOVar "x"; FOConst "b"]), FOFunc("f", [
 let clausify_example1 = FOForall("x", FOExists("y", FOAtomic("Loves", [FOVar "x"; FOVar "y"])))
 let clausify_example2 = FOImplies(FOForall("x", FOAtomic("Man", [FOVar "x"])), FOExists("y", FOAnd(FOAtomic("Mortal", [FOVar "y"]), FOAtomic("Man", [FOVar "y"]))))
 let clausify_example3 = FOForall("x", FOImplies(FOAnd(FOAtomic("Human", [FOVar "x"]), FOAtomic("Male", [FOVar "x"])), FOAtomic("Man", [FOVar "x"])))
+
+let resolution_example1 = FOForall("x", FOAtomic("P", [FOVar "x"]))
+let resolution_example2 = FOExists("x", FONeg (FOAtomic("P", [FOVar "x"])))
+let resolution_example3 = FOImplies(FOForall("x", FOAtomic("Man", [FOVar "x"])), FOAtomic("Man", [FOConst "socrates"]))
+let resolution_example4 = FOAnd(FOForall("x", FOImplies(FOAtomic("Man", [FOVar "x"]), FOAtomic("Mortal", [FOVar "x"]))), FOAtomic("Man", [FOConst "socrates"]))
+let resolution_example5 = FOForall("x", FOExists("y", FOAtomic("Loves", [FOVar "x"; FOVar "y"])))
+
+let resolution_unsat1 = FOAnd(FOForall("x", FOAtomic("P", [FOVar "x"])), FOExists("x", FONeg (FOAtomic("P", [FOVar "x"]))))
+let resolution_unsat2 = FOAnd(FOAnd(FOForall("x", FOImplies(FOAtomic("Man", [FOVar "x"]), FOAtomic("Mortal", [FOVar "x"]))), FOAtomic("Man", [FOConst "socrates"])), FONeg (FOAtomic("Mortal", [FOConst "socrates"])))

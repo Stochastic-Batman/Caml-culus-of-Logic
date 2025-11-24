@@ -4,15 +4,19 @@
 
 Implementation of selected concepts from propositional logic, first-order logic, logic programming, probabilistic logic programming, and fuzzy logic programming. 
 
+
 ### Definitions and AUX Modules
 
 The file `definitions.ml` contains the foundational type definitions and auxiliary functions utilized by subsequent implementations. This module serves as the core dependency for multiple files. The files under `aux/` folder are a collection of auxiliary functions for their respective modules (for example, `aux/aux_propositional.ml` contains auxiliary functions for propositional logic).
 
+
 ## Propositional Logic
+
 
 ### Normal Forms
 
 The module `propositional/nf.ml` implements recursive transformation algorithms for propositional logic expressions. It provides methods to convert expressions into three canonical forms: Negative Normal Form (NNF), Conjunctive Normal Form (CNF) and Disjunctive Normal Form (DNF).
+
 
 ### Proof Procedures
 
@@ -45,6 +49,7 @@ The `first_order/` logic implementation extends the propositional system with qu
 - **Substitutions**: Variable replacements with terms
 - **Structures**: Domain with function and predicate interpretations
 
+
 ### Clausification
 
 The module `first_order/clausification_first_order.ml` implements the complete clausification process:
@@ -55,8 +60,8 @@ The module `first_order/clausification_first_order.ml` implements the complete c
 
 <img src="images_for_README/clausification_first_order.png" width="500" height="300" alt="Clausification Process for First-Order Logic">
 
-### Unification
 
+### Unification
 
 The module `first_order/unification_first_order.ml` implements:
 - **Most General Unifier (MGU)**: Finds the most general substitution that unifies terms
@@ -74,12 +79,27 @@ The module `first_order/unification_first_order.ml` implements:
 <img src="images_for_README/unification_first_order_5.png" width="500" height="300" alt="Unification Algorithm Part 5">
 
 
+### Proof Procedures 
+
+`first_order/` folder also implements the following proof methods and some of the auxiliary functions for each method:
+
+1. Resolution
+
+<img src="images_for_README/resolution_first_order.png" width="500" height="300" alt="Resolution Procedure Pseudocode is supposed to be displayed here">
+
+
+2. Tableaux (not implemented yet)
+
+
+3. Sequent Calculus (not implemented yet)
+
+
 ## Executing the Tests
 
 Simply run this command to compile the code:
 
 ```
-ocamlc -I aux -I propositional -I first_order -o tests definitions.ml aux/aux_propositional.ml aux/aux_first_order.ml examples.ml propositional/nf.ml propositional/resolution_propositional.ml propositional/sequent_calculus_propositional.ml propositional/tableaux_propositional.ml first_order/clausification_first_order.ml first_order/unification_first_order.ml tests.ml
+ocamlc -I aux -I propositional -I first_order -o tests definitions.ml aux/aux_propositional.ml aux/aux_first_order.ml examples.ml propositional/nf.ml propositional/resolution_propositional.ml propositional/sequent_calculus_propositional.ml propositional/tableaux_propositional.ml first_order/clausification_first_order.ml first_order/unification_first_order.ml first_order/resolution_first_order.ml tests.ml
 ```
 
 and then run the tests:

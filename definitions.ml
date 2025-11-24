@@ -84,3 +84,7 @@ type interpretation_first_order = {
     structure: structure_first_order;
     variable_assignment: (string -> string); (* Maps variables to domain elements *)
 }
+
+(* First-Order Resolution *)
+
+type resolution_result = Unsatisfiable | Satisfiable | Unknown
