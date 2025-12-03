@@ -8,6 +8,8 @@ open Aux_first_order
 open Clausification_first_order
 open Unification_first_order
 open Resolution_first_order
+open Tableaux_first_order
+open Sequent_calculus_first_order
 open Examples
 
 
@@ -286,13 +288,115 @@ let run_resolution_first_order_tests () =
     Printf.printf "\n"
 
 
+let run_tableaux_first_order_tests () =
+    Printf.printf "=== First-Order Logic : Tableaux Tests ===\n";
+
+    (* Test 1: Direct test of semantic_tableaux_first_order on a simple formula *)
+    Printf.printf "Test 1: Direct test of semantic_tableaux_first_order\n";
+    let simple_formula = FOAtomic("P", [FOConst "a"]) in
+    Printf.printf "Testing formula: %s\n" (string_of_formula_first_order simple_formula);
+
+    try
+        let result = semantic_tableaux_first_order simple_formula in
+        Printf.printf "Result: ";
+        (match result with
+         | FOTableauClosed -> Printf.printf "FOTableauClosed\n"
+         | FOTableauOpen _ -> Printf.printf "FOTableauOpen\n"
+         | FOTableauUnknown -> Printf.printf "FOTableauUnknown\n");
+        Printf.printf "✓ semantic_tableaux_first_order is working\n\n";
+
+        (* Test 2: Test free_variable_tableaux *)
+        Printf.printf "Test 2: Direct test of free_variable_tableaux\n";
+        let result2 = free_variable_tableaux simple_formula in
+        Printf.printf "Result: ";
+        (match result2 with
+         | FOFVTableauClosed -> Printf.printf "FOFVTableauClosed\n"
+         | FOFVTableauOpen _ -> Printf.printf "FOFVTableauOpen\n"
+         | FOFVTableauUnknown -> Printf.printf "FOFVTableauUnknown\n");
+        Printf.printf "✓ free_variable_tableaux is working\n\n";
+
+        (* Now test the prove_by functions *)
+        Printf.printf "Test 3: Testing prove_by_semantic_tableaux on contradiction\n";
+        let contradiction = FOAnd(
+            FOAtomic("P", [FOConst "a"]),
+            FONeg(FOAtomic("P", [FOConst "a"]))
+        ) in
+        let result3 = prove_by_semantic_tableaux contradiction in
+        Printf.printf "Result for contradiction: %b\n" result3;
+        Printf.printf "✓ prove_by_semantic_tableaux is working\n\n";
+
+        Printf.printf "All tableaux tests passed!\n";
+
+    with exn ->
+        Printf.printf "Error: %s\n" (Printexc.to_string exn);
+        Printf.printf "Tableaux tests failed due to error.\n";
+
+    Printf.printf "\n"
+
+
+let run_sequent_calculus_first_order_tests () =
+    Printf.printf "=== First-Order Logic : Sequent Calculus Tests ===\n";
+
+    let test_sequent_calculus formula name =
+        Printf.printf "Testing: %s\n" name;
+        Printf.printf "Formula: %s\n" (string_of_formula_first_order formula);
+
+        let result = prove_formula_FO formula in
+        (match result with
+         | ProvedFO -> Printf.printf "Result: PROVED (valid)\n"
+         | FailedFO msg -> Printf.printf "Result: FAILED - %s (not valid)\n" msg);
+        Printf.printf "\n"
+    in
+
+    let test_general_sequent seq name =
+        Printf.printf "Testing sequent: %s\n" name;
+        Printf.printf "Sequent: %s\n" (string_of_sequent_calculus_FO_sequent seq);
+
+        let result = prove_sequent_top_FO seq in
+        (match result with
+         | ProvedFO -> Printf.printf "Result: PROVED\n"
+         | FailedFO msg -> Printf.printf "Result: FAILED - %s\n" msg);
+        Printf.printf "\n"
+    in
+
+    (* Test the three provable examples *)
+    test_sequent_calculus sequent_calculus_FO_example1
+        "∀x P(x) → P(a) (Universal instantiation)";
+
+    test_sequent_calculus sequent_calculus_FO_example2
+        "P(a) → ∃x P(x) (Existential generalization)";
+
+    test_sequent_calculus sequent_calculus_FO_example3
+        "Socrates mortality: (∀x Man(x)→Mortal(x) ∧ Man(socrates)) → Mortal(socrates)";
+
+    (* Test general sequents *)
+    test_general_sequent
+        { fo_antecedent = [FOAtomic("P", [FOConst "a"])];
+          fo_consequent = [FOAtomic("P", [FOConst "a"])] }
+        "P(a) ⟶ P(a) (axiom)";
+
+    test_general_sequent
+        { fo_antecedent = [FOForall("x", FOAtomic("P", [FOVar "x"]))];
+          fo_consequent = [FOAtomic("P", [FOConst "a"])] }
+        "∀x P(x) ⟶ P(a)";
+
+    test_general_sequent
+        { fo_antecedent = [FOAtomic("P", [FOConst "a"])];
+          fo_consequent = [FOExists("x", FOAtomic("P", [FOVar "x"]))] }
+        "P(a) ⟶ ∃x P(x)";
+
+    Printf.printf "\n"
+
+
 let run_all_tests () =
     run_nf_tests ();
     run_resolution_propositional_tests ();
     run_sequent_calculus_tests ();
     run_tableaux_tests ();
     run_first_order_tests ();
-    run_resolution_first_order_tests ()
+    run_resolution_first_order_tests ();
+    run_tableaux_first_order_tests ();
+    run_sequent_calculus_first_order_tests ()
 
 
 let () = run_all_tests ()

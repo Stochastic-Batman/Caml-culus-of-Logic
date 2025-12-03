@@ -45,8 +45,6 @@ type tableau_mark_propositional = Closed | Open | Unmarked
 
 (* First-Order Logic *)
 
-(* In definitions.ml, change the first-order logic types to use different names *)
-
 type term_first_order =
     | FOVar of string
     | FOConst of string
@@ -88,3 +86,46 @@ type interpretation_first_order = {
 (* First-Order Resolution *)
 
 type resolution_result = Unsatisfiable | Satisfiable | Unknown
+
+(* First-Order Semantic Tableaux *)
+
+type fo_semantic_tableau_node = {
+    st_formulas : formula_first_order list;
+    st_marked : bool;
+    st_node_type : fo_tableau_node_type;
+    st_free_vars : string list;
+    st_skolem_counter : int;
+} and fo_tableau_node_type = FOAlpha | FOBeta | FOGamma | FODelta | FOLiteral
+
+(* For free variable tableaux *)
+type fo_fv_tableau_branch = {
+    fvt_formulas : formula_first_order list;
+    fvt_free_vars : string list;
+    fvt_constraints : (term_first_order * term_first_order) list;
+    fvt_skolem_counter : int;
+    fvt_closed : bool;
+}
+
+type fo_tableau_result = FOTableauClosed | FOTableauOpen of structure_first_order option | FOTableauUnknown
+
+type fo_fv_tableau_result = FOFVTableauClosed | FOFVTableauOpen of structure_first_order option | FOFVTableauUnknown
+
+
+(* First-Order Sequent Calculus *)
+
+type sequent_calculus_FO_sequent = {
+    fo_antecedent : formula_first_order list;
+    fo_consequent : formula_first_order list
+}
+
+type sequent_calculus_FO_proof_result = ProvedFO | FailedFO of string
+
+(* For tracking constants and substitutions during proof *)
+type sequent_calculus_FO_proof_state = {
+    sequent : sequent_calculus_FO_sequent;
+    depth : int;
+    max_depth : int;
+    next_constant_index : int;
+    used_constants : string list;
+    ground_terms : term_first_order list;
+}

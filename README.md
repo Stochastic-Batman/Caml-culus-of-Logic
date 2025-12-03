@@ -85,13 +85,19 @@ The module `first_order/unification_first_order.ml` implements:
 
 1. Resolution
 
-<img src="images_for_README/resolution_first_order.png" width="500" height="300" alt="Resolution Procedure Pseudocode is supposed to be displayed here">
+<img src="images_for_README/resolution_first_order.png" width="500" height="300" alt="Resolution Procedure (FO) Pseudocode is supposed to be displayed here">
 
 
 2. Tableaux (not implemented yet)
 
+<img src="images_for_README/semantic_tableaux_first_order.png" width="600" height="300" alt="Semantic Tableaux (FO) Procedure is supposed to be displayed here">
+
+<img src="images_for_README/fv_tableaux_first_order.png" width="500" height="300" alt="Free Variable Tableaux Procedure is supposed to be displayed here">
+
 
 3. Sequent Calculus (not implemented yet)
+
+<img src="images_for_README/sequent_calculus_first_order.png" width="500" height="300" alt="First Order Sequent Calculus Updated Genzen System is supposed to be displayed here">
 
 
 ## Executing the Tests
@@ -99,7 +105,7 @@ The module `first_order/unification_first_order.ml` implements:
 Simply run this command to compile the code:
 
 ```
-ocamlc -I aux -I propositional -I first_order -o tests definitions.ml aux/aux_propositional.ml aux/aux_first_order.ml examples.ml propositional/nf.ml propositional/resolution_propositional.ml propositional/sequent_calculus_propositional.ml propositional/tableaux_propositional.ml first_order/clausification_first_order.ml first_order/unification_first_order.ml first_order/resolution_first_order.ml tests.ml
+ocamlc -I aux -I propositional -I first_order -o tests definitions.ml aux/aux_propositional.ml aux/aux_first_order.ml examples.ml propositional/nf.ml propositional/resolution_propositional.ml propositional/sequent_calculus_propositional.ml propositional/tableaux_propositional.ml first_order/clausification_first_order.ml first_order/unification_first_order.ml first_order/resolution_first_order.ml first_order/tableaux_first_order.ml first_order/sequent_calculus_first_order.ml tests.ml
 ```
 
 and then run the tests:

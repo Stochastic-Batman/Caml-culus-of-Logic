@@ -51,3 +51,75 @@ let resolution_example5 = FOForall("x", FOExists("y", FOAtomic("Loves", [FOVar "
 
 let resolution_unsat1 = FOAnd(FOForall("x", FOAtomic("P", [FOVar "x"])), FOExists("x", FONeg (FOAtomic("P", [FOVar "x"]))))
 let resolution_unsat2 = FOAnd(FOAnd(FOForall("x", FOImplies(FOAtomic("Man", [FOVar "x"]), FOAtomic("Mortal", [FOVar "x"]))), FOAtomic("Man", [FOConst "socrates"])), FONeg (FOAtomic("Mortal", [FOConst "socrates"])))
+
+
+(* Semantic Tableaux Examples for First-Order Logic *)
+let tableaux_fo_expr1 = FOForall("x", FOAtomic("P", [FOVar "x"]))
+let tableaux_fo_expr2 = FOExists("x", FOAtomic("P", [FOVar "x"]))
+let tableaux_fo_expr3 = FOImplies(
+    FOForall("x", FOImplies(FOAtomic("Human", [FOVar "x"]), FOAtomic("Mortal", [FOVar "x"]))),
+    FOImplies(FOAtomic("Human", [FOConst "socrates"]), FOAtomic("Mortal", [FOConst "socrates"]))
+)
+let tableaux_fo_expr4 = FOAnd(
+    FOForall("x", FOAtomic("P", [FOVar "x"])),
+    FONeg(FOAtomic("P", [FOConst "a"]))
+)
+let tableaux_fo_expr5 = FOImplies(
+    FOExists("x", FOForall("y", FOAtomic("Loves", [FOVar "x"; FOVar "y"]))),
+    FOForall("y", FOExists("x", FOAtomic("Loves", [FOVar "x"; FOVar "y"])))
+)
+
+
+(* Free Variable Tableaux Examples *)
+
+let fv_tableaux_expr1 = FOForall("x", FOAtomic("P", [FOVar "x"]))
+let fv_tableaux_expr2 = FOExists("x", FOAnd(
+    FOAtomic("P", [FOVar "x"]),
+    FONeg(FOAtomic("P", [FOVar "x"]))
+))
+let fv_tableaux_expr3 = FOImplies(
+    FOAnd(
+        FOForall("x", FOImplies(FOAtomic("Human", [FOVar "x"]), FOAtomic("Mortal", [FOVar "x"]))),
+        FOAtomic("Human", [FOConst "socrates"])
+    ),
+    FOAtomic("Mortal", [FOConst "socrates"])
+)
+let fv_tableaux_expr4 = FOExists("x", FOForall("y", FOAtomic("R", [FOVar "x"; FOVar "y"])))
+let fv_tableaux_expr5 = FOImplies(
+    FOForall("x", FOAtomic("P", [FOVar "x"])),
+    FOExists("y", FOAtomic("P", [FOVar "y"]))
+)
+
+(* Three provable examples for First-Order Sequent Calculus *)
+
+let sequent_calculus_FO_example1 =
+    FOImplies(
+        FOForall("x", FOAtomic("P", [FOVar "x"])),
+        FOAtomic("P", [FOConst "a"])
+    )
+(* ∀x P(x) → P(a) - Universal instantiation *)
+
+
+let sequent_calculus_FO_example2 =
+    FOImplies(
+        FOAtomic("P", [FOConst "a"]),
+        FOExists("x", FOAtomic("P", [FOVar "x"]))
+    )
+(* P(a) → ∃x P(x) - Existential generalization *)
+
+
+let sequent_calculus_FO_example3 =
+    FOImplies(
+        FOAnd(
+            FOForall("x",
+                FOImplies(
+                    FOAtomic("Man", [FOVar "x"]),
+                    FOAtomic("Mortal", [FOVar "x"])
+                )
+            ),
+            FOAtomic("Man", [FOConst "socrates"])
+        ),
+        FOAtomic("Mortal", [FOConst "socrates"])
+    )
+(* (∀x Man(x)→Mortal(x) ∧ Man(socrates)) → Mortal(socrates) - Socrates mortality *)
+
