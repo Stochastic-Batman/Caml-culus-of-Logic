@@ -107,3 +107,9 @@ and then run the tests:
 ```
 ./tests
 ```
+
+## Bonus: Beta Reduction from Lambda Calculus
+
+<img src="images_for_README/BetaReduction.jpg" width="500" height="300" alt="Beta Reduction">
+
+The implementation of Beta Reduction (Lambda Calculus) took only a single file: `Lambda Calculus - Beta Reduction.ml`
