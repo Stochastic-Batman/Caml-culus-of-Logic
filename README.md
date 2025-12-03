@@ -1,4 +1,4 @@
-# 🐫 Caml-culus of Logic
+# 🐫 Logic OCamlculus
 
 [![OCaml](https://img.shields.io/badge/ocaml-5.3.0-orange.svg)](https://ocaml.org/releases/ocaml-5.3.html)
 
