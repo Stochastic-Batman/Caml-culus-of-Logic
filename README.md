@@ -88,14 +88,14 @@ The module `first_order/unification_first_order.ml` implements:
 <img src="images_for_README/resolution_first_order.png" width="500" height="300" alt="Resolution Procedure (FO) Pseudocode is supposed to be displayed here">
 
 
-2. Tableaux (not implemented yet)
+2. Tableaux
 
 <img src="images_for_README/semantic_tableaux_first_order.png" width="600" height="300" alt="Semantic Tableaux (FO) Procedure is supposed to be displayed here">
 
 <img src="images_for_README/fv_tableaux_first_order.png" width="500" height="300" alt="Free Variable Tableaux Procedure is supposed to be displayed here">
 
 
-3. Sequent Calculus (not implemented yet)
+3. Sequent Calculus
 
 <img src="images_for_README/sequent_calculus_first_order.png" width="500" height="300" alt="First Order Sequent Calculus Updated Genzen System is supposed to be displayed here">
 
