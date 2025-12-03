@@ -112,4 +112,4 @@ and then run the tests:
 
 <img src="images_for_README/BetaReduction.jpg" width="500" height="300" alt="Beta Reduction">
 
-The implementation of Beta Reduction (Lambda Calculus) took only a single file: `Lambda Calculus - Beta Reduction.ml`
+The implementation of Beta Reduction (Lambda Calculus) took only a single file: `Lambda Calculus - Beta Reduction.ml`. The image above is from [piedeleu.com](https://piedeleu.com/posts/diagrammatic-lambda-calculus/).
