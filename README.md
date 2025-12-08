@@ -100,12 +100,19 @@ The module `first_order/unification_first_order.ml` implements:
 <img src="images_for_README/sequent_calculus_first_order.png" width="500" height="300" alt="First Order Sequent Calculus Updated Genzen System is supposed to be displayed here">
 
 
+## Logic Programming
+
+The module `SLD_resolution.ml` implements SLD (Selective Linear Definite clause) resolution:
+
+<img src="images_for_README/sld_resolution.png" width="500" height="300" alt="SLD Resolution">
+
+
 ## Executing the Tests
 
 Simply run this command to compile the code:
 
 ```
-ocamlc -I aux -I propositional -I first_order -o tests definitions.ml aux/aux_propositional.ml aux/aux_first_order.ml examples.ml propositional/nf.ml propositional/resolution_propositional.ml propositional/sequent_calculus_propositional.ml propositional/tableaux_propositional.ml first_order/clausification_first_order.ml first_order/unification_first_order.ml first_order/resolution_first_order.ml first_order/tableaux_first_order.ml first_order/sequent_calculus_first_order.ml tests.ml
+ocamlc -I aux -I propositional -I first_order -o tests definitions.ml aux/aux_propositional.ml aux/aux_first_order.ml examples.ml propositional/nf.ml propositional/resolution_propositional.ml propositional/sequent_calculus_propositional.ml propositional/tableaux_propositional.ml first_order/clausification_first_order.ml first_order/unification_first_order.ml first_order/resolution_first_order.ml first_order/tableaux_first_order.ml first_order/sequent_calculus_first_order.ml SLD_resolution.ml tests.ml
 ```
 
 and then run the tests:

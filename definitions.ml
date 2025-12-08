@@ -129,3 +129,29 @@ type sequent_calculus_FO_proof_state = {
     used_constants : string list;
     ground_terms : term_first_order list;
 }
+
+(* Logic Programming (SLD Resolution) *)
+
+type term_sld = SLD_Var of string | SLD_Const of string | SLD_Func of string * term_sld list
+
+type atom_sld = string * term_sld list  (* predicate name and arguments *)
+
+type clause_sld = { head: atom_sld; body: atom_sld list }
+
+type goal_sld = atom_sld list
+
+type substitution_sld = (string * term_sld) list
+
+type sld_step = {
+    goal: goal_sld;
+    selected_atom: atom_sld;
+    clause_used: clause_sld;
+    mgu: substitution_sld option;
+    new_goal: goal_sld
+}
+
+type sld_derivation = sld_step list
+
+type sld_result = Success of substitution_sld * sld_derivation | Failure of sld_derivation | Infinite
+
+type program_sld = clause_sld list

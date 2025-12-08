@@ -10,6 +10,7 @@ open Unification_first_order
 open Resolution_first_order
 open Tableaux_first_order
 open Sequent_calculus_first_order
+open SLD_resolution
 open Examples
 
 
@@ -388,6 +389,29 @@ let run_sequent_calculus_first_order_tests () =
     Printf.printf "\n"
 
 
+let run_sld_lp () =
+    Printf.printf "=== Logic Programming : SLD Resolution Tests ===\n\n";
+    
+    Printf.printf "Test 1: Family Program\n";
+    Printf.printf "Program:\n";
+    List.iter (fun c -> Printf.printf "  %s\n" (string_of_clause_sld c)) family_program;
+    Printf.printf "Query: ancestor(alice, Y)\n";
+    let result1 = sld_query family_program query_find_ancestor 10 in
+    Printf.printf "Result: %s\n\n" (string_of_sld_result result1);
+    
+    Printf.printf "Test 2: Natural Numbers\n";
+    Printf.printf "Query: nat(s(0))\n";
+    let result2 = sld_query nat_program query_nat 5 in
+    Printf.printf "Result: %s\n\n" (string_of_sld_result result2);
+    
+    Printf.printf "Test 3: Simple Facts\n";
+    Printf.printf "Query: teacher(mary)\n";
+    let result3 = sld_query simple_program query_teacher 5 in
+    Printf.printf "Result: %s\n\n" (string_of_sld_result result3);
+    
+    Printf.printf "All tests completed!\n"
+
+
 let run_all_tests () =
     run_nf_tests ();
     run_resolution_propositional_tests ();
@@ -396,7 +420,8 @@ let run_all_tests () =
     run_first_order_tests ();
     run_resolution_first_order_tests ();
     run_tableaux_first_order_tests ();
-    run_sequent_calculus_first_order_tests ()
+    run_sequent_calculus_first_order_tests ();
+    run_sld_lp ()
 
 
 let () = run_all_tests ()

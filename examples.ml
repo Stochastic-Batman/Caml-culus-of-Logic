@@ -123,3 +123,54 @@ let sequent_calculus_FO_example3 =
     )
 (* (∀x Man(x)→Mortal(x) ∧ Man(socrates)) → Mortal(socrates) - Socrates mortality *)
 
+(* Logic Programming Examples *)
+
+(* Example 1: Family relationships *)
+let parent_alice_bob = {
+    head = ("parent", [SLD_Const "alice"; SLD_Const "bob"]);
+    body = []
+}
+
+let parent_bob_charlie = {
+    head = ("parent", [SLD_Const "bob"; SLD_Const "charlie"]);
+    body = []
+}
+
+let ancestor_rule1 = {
+    head = ("ancestor", [SLD_Var "X"; SLD_Var "Y"]);
+    body = [("parent", [SLD_Var "X"; SLD_Var "Y"])]
+}
+
+let family_program = [parent_alice_bob; parent_bob_charlie; ancestor_rule1]
+
+let query_find_ancestor = [("ancestor", [SLD_Const "alice"; SLD_Var "Y"])]
+
+(* Example 2: Natural numbers *)
+let nat_zero = {
+    head = ("nat", [SLD_Const "0"]);
+    body = []
+}
+
+let nat_succ = {
+    head = ("nat", [SLD_Func("s", [SLD_Var "X"])]);
+    body = [("nat", [SLD_Var "X"])]
+}
+
+let nat_program = [nat_zero; nat_succ]
+
+let query_nat = [("nat", [SLD_Func("s", [SLD_Const "0"])])]
+
+(* Example 3: Simple facts *)
+let student_joe = {
+    head = ("student", [SLD_Const "joe"]);
+    body = []
+}
+
+let teacher_mary = {
+    head = ("teacher", [SLD_Const "mary"]);
+    body = []
+}
+
+let simple_program = [student_joe; teacher_mary]
+
+let query_teacher = [("teacher", [SLD_Const "mary"])]
